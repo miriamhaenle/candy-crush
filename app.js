@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   const width = 8;
   const squares = [];
-
+  let score = 0;
   const candyColors = [
     'hotpink',
     'papayawhip',
@@ -77,6 +77,33 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       squares[squareIdBeingDragged].style.backgroundColor = colorBeingDragged;
     }
+
+    // Checking for matches
+    function checkRowForThree() {
+      for (i = 0; i < 61; i++) {
+        let rowOfThree = [i, i + 1, i + 2];
+        let decidedColor = squares[i].style.backgroundColor;
+        const isBlank = squares[i].style.backgroundColor === '';
+
+        if (
+          rowOfThree.every(
+            (index) =>
+              squares[index].style.backgroundColor === decidedColor && !isBlank
+          )
+        ) {
+          score += 3;
+          rowOfThree.forEach((index) => {
+            squares[index].style.backgroundColor = '';
+          });
+        }
+      }
+    }
+
+    checkRowForThree();
+
+    window.setInterval(function () {
+      checkRowForThree();
+    }, 100);
   }
   function dragDrop() {
     colorBeingReplaced = this.style.backgroundColor;
